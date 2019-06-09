@@ -20,20 +20,16 @@ const readDir = (base, level) => {
         } else {
             let subDirName = item.charAt(0).toUpperCase();
             console.log(' '.repeat(level) + 'File: ' + subDirName + ' => ' + item);
-            if (!fs.existsSync(`${dst}/${subDirName}`)) {
-                fs.mkdirSync(`${dst}/${subDirName}`);
+            if (!fs.existsSync(path.join(dst, subDirName))) {
+                fs.mkdirSync(path.join(dst, subDirName));
             }
-            let newPath = `${dst}/${subDirName}/${item}`;
+            let newPath = path.join(dst, subDirName, item);
 
             if (fs.existsSync(newPath)) {
                 return;
             }
 
-            fs.link(localBase, newPath, err => {
-                if (err) {
-                    console.error(err.message);
-                }
-            });
+            fs.linkSync(localBase, newPath);
         }
     })
 };
